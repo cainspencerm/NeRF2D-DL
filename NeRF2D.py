@@ -134,14 +134,14 @@ if __name__=='__main__':
     channels = image.shape[-1]
     model = Sequential()
     for _ in range(args.layers):
-        model.add(Dense(args.neurons))
-        model.add(Activation('relu'))
+        model.add(Dense(args.neurons, activation='relu'))
     model.add(Dense(channels, activation='linear'))
 
     # Initialize the model.
     loss_fn = tf.keras.losses.MeanSquaredError()
+    metric = tf.keras.metrics.MeanSquaredError()
     optimizer = tf.keras.optimizers.Adam(learning_rate=args.learning_rate)
-    model.compile(optimizer=optimizer, loss=loss_fn, metrics=[tf.keras.metrics.MeanSquaredError()])
+    model.compile(optimizer=optimizer, loss=loss_fn, metrics=[metric])
     model.build(input_shape=input_shape)
     model.summary()
 
@@ -162,15 +162,15 @@ if __name__=='__main__':
 
     # Optionally save the output.
     if args.export_memory is not None:
-        pred_image = np.zeros(image.shape)
+        pred_image = np.zeros_like(image)
         output = model(positions, training=False)
 
-        indices_int = indices.astype('int')
-        indices_int = indices_int[:, 1] * width + indices_int[:, 0]
+        indices = indices.astype('int')
+        indices = indices[:, 1] * width + indices[:, 0]
 
-        np.put(pred_image[:, :, 0], indices_int, np.clip((output[:, 0]+1)/2.0, 0, 1))
-        np.put(pred_image[:, :, 1], indices_int, np.clip((output[:, 1]+1)/2.0, 0, 1))
-        np.put(pred_image[:, :, 2], indices_int, np.clip((output[:, 2]+1)/2.0, 0, 1))
+        np.put(pred_image[:, :, 0], indices, np.clip((output[:, 0]+1)/2.0, 0, 1))
+        np.put(pred_image[:, :, 1], indices, np.clip((output[:, 1]+1)/2.0, 0, 1))
+        np.put(pred_image[:, :, 2], indices, np.clip((output[:, 2]+1)/2.0, 0, 1))
 
         save_img = np.copy(pred_image[...,::-1]*255.0)
         cv2.imwrite(args.export_memory + '.jpg', save_img.astype('uint8'))
