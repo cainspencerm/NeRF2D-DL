@@ -104,7 +104,7 @@ if __name__=='__main__':
     parser.add_argument('--neurons', type=int, default=128, help='Number of neurons per layer')
     parser.add_argument('--layers', type=int, default=2, help='Number of layers')
     parser.add_argument('--epochs', type=int, default=1000, help='Number of epochs')
-    parser.add_argument('--learning-rate', type=float, default=1e-3, help='Learning rate')
+    parser.add_argument('--learning-rate', type=float, default=5e-4, help='Learning rate')
     parser.add_argument('--batch-size', type=int, default=256 * 256, help='Number of pixels per batch')
     parser.add_argument('--encoding', type=str, default='sin_cos',
             help=f'Positional encoding, one of {Positional_Encoding.available_encodings}')
