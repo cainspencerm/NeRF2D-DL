@@ -148,7 +148,7 @@ if __name__=='__main__':
     image = image / 255.0
 
     # Create dataset of image pixels.
-    positional_encoding = Positional_Encoding(image, args.encoding)
+    positional_encoding = Positional_Encoding(image, args.encoding, args.L)
     positions, targets, indices = positional_encoding.get_dataset(shuffle=True)
     input_shape = [None, positions.shape[1]]
 
